@@ -36,7 +36,7 @@ There's no server component. Opening the file in a browser is the entire deploym
 - Results get formatted and injected as a system message ahead of your query, so the model answers with live web context regardless of which inference provider is doing the actual generation.
 
 **Customize (global user profile)**
-- A ChatGPT/You.com-style custom-instructions panel: full name, preferred nickname, a short freeform bio, and a preferred response language.
+- A ChatGPT/Claude-style custom-instructions panel: full name, preferred nickname, a short freeform bio, and a preferred response language.
 - This gets merged into the system message on every chat automatically, layered on top of any per-chat system prompt — so you don't have to re-explain who you are every conversation.
 
 **Appearance**
@@ -44,7 +44,7 @@ There's no server component. Opening the file in a browser is the entire deploym
 
 ## Storage & privacy model
 
-This is the part that got the most iteration, and it's deliberately split into three tiers depending on sensitivity:
+This is the part that I built this project for, and it's deliberately split into three tiers depending on sensitivity:
 
 | Data | Where it lives | Persists across refresh? |
 |---|---|---|
