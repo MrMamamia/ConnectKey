@@ -14,6 +14,7 @@ There's no server component. Opening the file in a browser is the entire deploym
 - Works with any API that implements the OpenAI `/chat/completions` schema: OpenAI, Groq, Cerebras, NVIDIA Build, and Google's Gemini via its OpenAI-compatibility endpoint (`https://generativelanguage.googleapis.com/v1beta/openai`).
 - Add unlimited named endpoints (base URL + key + default model), switch between them from a dropdown.
 - Streaming responses.
+- Added Export, Import button in settings panel for quick export and import of Search keys, chats, currentChatId, app prefs and user profiles
 
 **Chat management**
 - Sidebar with full chat history, one conversation per entry.
