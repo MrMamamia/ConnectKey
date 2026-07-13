@@ -54,7 +54,7 @@ This is the part that I built this project for, and it's deliberately split into
 | Chat history (messages, attachments, titles) | `IndexedDB` | Yes |
 | Appearance & Customize profile | `localStorage` | Yes |
 
-The reasoning: your primary inference keys are the highest-value secret in this tool, so they were deliberately kept out of any persistent store — you paste them once per session and they're gone the moment the tab closes. The search keys and personalization data were explicitly asked to be persistent for convenience, so those are saved. Chat history moved from `localStorage` to `IndexedDB` specifically to lift the ~5-10MB browser storage cap (which image-heavy conversations could hit) up to whatever your disk allows.
+The reasoning: your primary inference keys are the highest-value secret in this tool, so they were deliberately kept out of any persistent store — you paste them once per session and they're gone the moment the tab closes. The search keys and personalization data were explicitly persistent across all sessions for convenience, so those are saved. Chat history moved from `localStorage` to `IndexedDB` specifically to lift the ~5-10MB browser storage cap (which image-heavy conversations could hit) up to whatever your disk allows.
 
 None of this data goes to any third party except the exact API endpoints you configure. There is no analytics, no telemetry, no external server involved in running the app itself.
 
