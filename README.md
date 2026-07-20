@@ -4,7 +4,7 @@ A single-file, self-contained BYOK (Bring Your Own Key) chat client for any Open
 
 ## What it is
 
-This started as a simple request: a GUI to manage API keys and chat with them. It grew into a full local ChatGPT-style client that talks to whichever inference provider you want, with your own keys, entirely on your own machine.
+This started as a simple thought: a GUI to manage API keys and chat with them. It grew into a full local ChatGPT-style client that talks to whichever inference provider you want, with your own keys, entirely on your own machine.
 
 There's no server component. Opening the file in a browser is the entire deployment. It works offline except for the actual API calls to whichever model provider you've configured.
 
