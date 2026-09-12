@@ -2,13 +2,21 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>ConnectKey.AI</title>
 <meta name="description" content="Multi-provider AI chat console inspired by Claude and ChatGPT with persistent history, web search, custom instructions, and attachments." />
 <meta property="og:title" content="ConnectKey.AI" />
 <meta property="og:description" content="Multi-provider AI chat console inspired by Claude and ChatGPT with persistent history, web search, custom instructions, and attachments." />
 <meta property="og:type" content="website" />
 <meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#fbfbfa" id="metaThemeColor" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="ConnectKey" />
+<link rel="manifest" href="/manifest.webmanifest" />
+<link rel="icon" type="image/svg+xml" href="/icon.svg" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 <style>
   :root {
     /* Claude + ChatGPT Warm Aesthetic */
@@ -1020,6 +1028,48 @@
   @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
   @keyframes slideDown { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
 
+  /* Mobile & Code Snippet Styling */
+  .code-instruction-block {
+    background: var(--code-bg);
+    color: var(--code-text);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+    font-size: 12.5px;
+    line-height: 1.6;
+    overflow-x: auto;
+    position: relative;
+    border: 1px solid var(--border-color);
+  }
+  .copy-code-float-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: #ffffff;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    cursor: pointer;
+  }
+  .copy-code-float-btn:hover {
+    background: rgba(255,255,255,0.2);
+  }
+  .guide-pill-step {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--primary-soft);
+    color: var(--primary);
+    font-size: 11.5px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
   /* Mobile responsiveness */
   @media (max-width: 768px) {
     #sidebar {
@@ -1038,10 +1088,10 @@
       display: none;
     }
     #chatArea {
-      padding: 16px 14px 140px;
+      padding: 16px 14px 150px;
     }
     #composer-area {
-      padding: 0 12px 12px;
+      padding: 0 12px max(14px, env(safe-area-inset-bottom));
     }
   }
 
@@ -1097,6 +1147,15 @@
     <div id="sidebarList"></div>
 
     <div class="sidebar-footer">
+      <button class="user-footer-btn" id="mobileGuideSidebarBtn" title="Mobile, Termux & APK Guide" style="margin-bottom: 6px;">
+        <div class="user-avatar-badge" style="background: var(--bg-hover); color: var(--primary);">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg>
+        </div>
+        <div style="flex:1;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+          <div style="font-weight:500;font-size:13px;">Mobile & Termux</div>
+          <div class="muted" style="font-size:11px;">Install App / APK / CLI</div>
+        </div>
+      </button>
       <button class="user-footer-btn" id="userFooterBtn" title="Settings & Profile">
         <div class="user-avatar-badge" id="userAvatarBadge">CK</div>
         <div style="flex:1;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
@@ -1357,6 +1416,105 @@
               <p class="muted" style="font-size:12px;line-height:1.4;">Exports/imports all conversation history, web search keys, appearance preferences, and persona context. Session endpoint keys are not exported.</p>
             </div>
 
+            <!-- SECTION 6: Mobile, Termux & Standalone APK -->
+            <div class="settings-section-card" id="mobileGuideSection" style="margin-top: 20px;">
+              <div class="settings-section-header">
+                <div class="settings-section-title">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg>
+                  <span>Mobile, Termux & APK Deployment</span>
+                </div>
+                <span class="muted">Android, Termux & Offline</span>
+              </div>
+
+              <div style="display: flex; flex-direction: column; gap: 16px;">
+                
+                <!-- Option 1: Native WebAPK / PWA Install -->
+                <div style="background: var(--bg-hover); border-radius: var(--radius-md); padding: 14px; border: 1px solid var(--border-subtle);">
+                  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+                    <div style="font-weight: 600; font-size: 13.5px; display: flex; align-items: center; gap: 8px;">
+                      <span class="guide-pill-step">1</span>
+                      <span>Install as Android App (WebAPK / PWA)</span>
+                    </div>
+                    <span class="muted" style="font-size: 11.5px; background: var(--bg-card); padding: 3px 8px; border-radius: var(--radius-pill); border: 1px solid var(--border-color);">Via Browser Menu</span>
+                  </div>
+                  <p class="muted" style="font-size: 12.5px; line-height: 1.5; margin-bottom: 12px;">
+                    Android automatically compiles and installs a native <strong>WebAPK</strong> when added from your mobile browser:
+                  </p>
+                  <div style="font-size: 12.5px; color: var(--text-main); background: var(--bg-card); padding: 12px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); line-height: 1.7;">
+                    <div style="font-weight: 600; margin-bottom: 4px; color: var(--text-main);">Steps for Chrome, Brave, Edge & Samsung Internet:</div>
+                    1. Tap the three vertical dots (<strong>⋮</strong>) in the top-right corner of your browser.<br>
+                    2. Tap <strong>"Install app"</strong> (or <strong>"Add to Home screen"</strong>).<br>
+                    3. Tap <strong>Install</strong> when prompted.<br>
+                    <div class="muted" style="font-size: 11.5px; margin-top: 6px;">Android will create a native app icon on your home screen and app drawer that opens fullscreen.</div>
+                  </div>
+                </div>
+
+                <!-- Option 2: Termux on Android -->
+                <div style="background: var(--bg-hover); border-radius: var(--radius-md); padding: 14px; border: 1px solid var(--border-subtle);">
+                  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+                    <div style="font-weight: 600; font-size: 13.5px; display: flex; align-items: center; gap: 8px;">
+                      <span class="guide-pill-step">2</span>
+                      <span>Run Locally in Termux (Android Terminal)</span>
+                    </div>
+                  </div>
+                  <p class="muted" style="font-size: 12.5px; line-height: 1.5; margin-bottom: 10px;">
+                    Because ConnectKey.AI is 100% self-contained in a single file, you can run it right inside Termux using Python's built-in web server:
+                  </p>
+                  <div class="code-instruction-block" style="margin-bottom: 10px;">
+                    <button class="copy-code-float-btn" id="copyTermuxBtn">Copy Script</button>
+                    <pre id="termuxScriptCode" style="padding:0; background:transparent; font-size:12px; line-height:1.5;"># 1. Update Termux & install python
+pkg update -y && pkg install python curl -y
+
+# 2. Download ConnectKey single-file
+curl -sSL "https://connectkeyai.vercel.app/" -o index.html
+
+# 3. Host locally and launch in browser
+python -m http.server 8080 &
+termux-open-url http://localhost:8080</pre>
+                  </div>
+                  <div class="row" style="gap: 8px;">
+                    <button id="downloadHtmlFileBtn" class="secondary" style="padding: 8px 14px; font-size: 12.5px;">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                      <span>Download Single-File (index.html)</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Option 3: Package as Standalone .apk File -->
+                <div style="background: var(--bg-hover); border-radius: var(--radius-md); padding: 14px; border: 1px solid var(--border-subtle);">
+                  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+                    <div style="font-weight: 600; font-size: 13.5px; display: flex; align-items: center; gap: 8px;">
+                      <span class="guide-pill-step">3</span>
+                      <span>Package as a Standalone .apk File</span>
+                    </div>
+                  </div>
+                  <p class="muted" style="font-size: 12.5px; line-height: 1.5; margin-bottom: 10px;">
+                    Want an actual <code>.apk</code> installer package to sideload or share? You can generate one in 60 seconds with Microsoft's official <strong>PWABuilder</strong> tool without needing Android Studio:
+                  </p>
+                  <ol style="margin-left: 20px; font-size: 12.5px; color: var(--text-muted); line-height: 1.6; margin-bottom: 12px;">
+                    <li>Copy your live app URL using the <strong>"Copy App URL"</strong> button below.</li>
+                    <li>Click <strong>"Open PWABuilder"</strong> to visit <strong>PWABuilder.com</strong> (it opens with your URL preloaded).</li>
+                    <li>Click <strong>Start</strong> &gt; select <strong>Android</strong> &gt; click <strong>Package APK</strong>.</li>
+                    <li>Download the generated <code>.apk</code> and install it directly on your Android phone!</li>
+                  </ol>
+                  <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 8px 12px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+                    <span style="font-family: ui-monospace, monospace; font-size: 12px; color: var(--text-main); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" id="pwaTargetUrlDisplay">https://connectkeyai.vercel.app/</span>
+                    <button id="copyPwaUrlBtn" class="secondary" style="padding: 5px 12px; font-size: 11.5px; flex-shrink: 0;">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                      <span id="copyPwaUrlBtnText">Copy URL</span>
+                    </button>
+                  </div>
+                  <div class="row" style="gap: 8px;">
+                    <a id="openPwaBuilderBtn" href="https://www.pwabuilder.com/?url=https%3A%2F%2Fconnectkeyai.vercel.app%2F" target="_blank" rel="noopener noreferrer" class="btn-primary" style="padding: 8px 16px; border-radius: var(--radius-pill); font-size: 12.5px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                      <span>Open PWABuilder (Generate .apk)</span>
+                    </a>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
@@ -1405,6 +1563,80 @@ $('settingsToggle')?.addEventListener('click', showSettingsScreen);
 $('userFooterBtn')?.addEventListener('click', showSettingsScreen);
 $('backToChatBtn')?.addEventListener('click', showChatScreen);
 $('doneSettingsBtn')?.addEventListener('click', showChatScreen);
+
+// ---------- Mobile & Standalone Guide Navigation ----------
+function showMobileGuide() {
+  showSettingsScreen();
+  setTimeout(() => {
+    const section = $('mobileGuideSection');
+    if (section) section.scrollIntoView({ behavior: 'smooth' });
+  }, 100);
+}
+$('mobileGuideSidebarBtn')?.addEventListener('click', showMobileGuide);
+
+// ---------- Termux & Standalone APK Helpers ----------
+function updateTermuxCode() {
+  const codeEl = $('termuxScriptCode');
+  if (codeEl) {
+    codeEl.textContent = `# 1. Update Termux & install python\npkg update -y && pkg install python curl -y\n\n# 2. Download ConnectKey single-file\ncurl -sSL "https://connectkeyai.vercel.app/" -o index.html\n\n# 3. Host locally and launch in browser\npython -m http.server 8080 &\ntermux-open-url http://localhost:8080`;
+  }
+}
+updateTermuxCode();
+
+$('copyTermuxBtn')?.addEventListener('click', () => {
+  const codeEl = $('termuxScriptCode');
+  if (codeEl) {
+    navigator.clipboard.writeText(codeEl.textContent);
+    const btn = $('copyTermuxBtn');
+    const old = btn.textContent;
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = old, 2000);
+  }
+});
+
+$('downloadHtmlFileBtn')?.addEventListener('click', async () => {
+  const btn = $('downloadHtmlFileBtn');
+  const oldText = btn.innerHTML;
+  btn.innerHTML = 'Downloading...';
+  try {
+    const resp = await fetch(window.location.href);
+    const html = await resp.text();
+    const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'ConnectKey-AI.html';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    btn.innerHTML = '✓ Downloaded index.html';
+    setTimeout(() => btn.innerHTML = oldText, 2500);
+  } catch (err) {
+    btn.innerHTML = oldText;
+    console.error('Download failed', err);
+  }
+});
+
+$('copyPwaUrlBtn')?.addEventListener('click', () => {
+  const url = $('pwaTargetUrlDisplay')?.textContent || 'https://connectkeyai.vercel.app/';
+  navigator.clipboard.writeText(url);
+  const textEl = $('copyPwaUrlBtnText');
+  if (textEl) {
+    const old = textEl.textContent;
+    textEl.textContent = 'Copied!';
+    setTimeout(() => textEl.textContent = old, 2000);
+  }
+});
+
+// Register Service Worker for offline mobile execution & PWA compliance
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch(err => {
+      console.debug('Service Worker registration skipped:', err);
+    });
+  });
+}
 
 // ---------- Global Utilities ----------
 window.copyToClipboard = function(btn) {
